@@ -1,0 +1,132 @@
+//----------------------------------------------------BOOKS-------------------------------------------------------------
+### Get 5 random books
+GET http://localhost:3000/random-books
+
+
+### Get all books
+GET http://localhost:3000/books
+
+### Get one book by id
+GET http://localhost:3000/book/60
+
+
+
+//----------------------------------------------------ADMIN-------------------------------------------------------------
+### Add a book in database 
+POST http://localhost:3000/admin/book
+Content-Type: application/json
+
+{
+    "isbn": "125356985255",
+    "title": "Test",
+    "author": "Serge Bloch",
+    "summary": "Roi de la cour de récré, maître en l'art du zéro pointé, tout le monde connaît Toto ! Comment s'occupe Toto sur la route des vacances ? A quoi Toto reconnaît-il un motard heureux ? Impossible à deviner sans lire ces gags hilarants de Toto et sa bande de rigolos ! Une BD à se tordre de rire !",
+    "image": "https://m.media-amazon.com/images/I/71DwQ+i0w0L._AC_UF1000,1000_QL80_.jpg",
+    "pages": 111,
+    "editor": "Tourbillon",
+    "publication_year": 2025
+}
+
+
+###Edit a book in database 
+PATCH http://localhost:3000/admin/book/295
+Content-Type: application/json
+
+{
+    "title": "Titre",
+    "pages": 1,
+    "editor": "Tourbillon2"
+}
+
+
+###Delete a book in database 
+DELETE http://localhost:3000/admin/book/33
+
+
+
+
+//----------------------------------------------------LIBRARY-------------------------------------------------------------
+### Get all libraries by user id (WITHOUT books)
+GET http://localhost:3000/user/1/libraries
+
+### Get all libraries by user id (WITH books)
+GET http://localhost:3000/user/1/libraries/books
+
+
+###Add a book in a library 
+POST http://localhost:3000/library/1/book/17
+
+
+###Edit status of a book in a library 
+PATCH http://localhost:3000/library/1/book/1
+
+
+###Delete a book in a library 
+DELETE http://localhost:3000/library/1/book/5
+
+
+###Add a library for an user (User 1 hardcoded in the controller, MUST be changed for production.)
+POST http://localhost:3000/library
+Content-Type: application/json
+
+{
+    "name": ""
+}
+
+### Get one library by id (with books)
+GET http://localhost:3000/library/7
+
+###Edit a library by id
+PATCH http://localhost:3000/library/3
+Content-Type: application/json
+
+{
+    "name": "Test modification 3"
+}
+
+### Delete a library by id
+DELETE http://localhost:3000/library/2
+
+
+###Switch a book in library
+PATCH http://localhost:3000/library/6/book/1/newLibrary/8
+
+
+//----------------------------------------------------AUTHENTIFICATION-------------------------------------------------------------
+###Create user 
+POST http://localhost:3000/register
+Content-Type: application/json
+
+{
+    "name": "Bruce",
+    "firstname": "Wayne",
+    "email": "test@gmail.com",
+    "password": "test"
+}
+
+###Login user
+POST http://localhost:3000/login
+Content-Type: application/json
+
+{
+    "email": "test@gmail.com",
+    "password": "test"
+}
+
+
+//----------------------------------------------------USER-------------------------------------------------------------
+### Get one user (User 1 hardcoded in the controller, MUST be changed for production.)
+GET http://localhost:3000/user
+
+
+###Edit an user  (User 1 hardcoded in the controller, MUST be changed for production.)
+PATCH http://localhost:3000/user
+Content-Type: application/json
+
+{
+    "name": "Tottto",
+    "firstname": "Tatas",
+    "password": "test",
+    "confirmPassword": "test",
+    "currentPassword": "test7"
+}

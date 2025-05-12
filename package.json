@@ -4,8 +4,8 @@
   "description": "��#\u0000 \u0000b\u0000l\u0000a\u0000b\u0000l\u0000a\u0000-\u0000b\u0000o\u0000o\u0000k\u0000\r\u0000 \u0000",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
+    "test": "jest --verbose",
+    "dev": "nodemon",
     "model:test": "node --loader ts-node/esm --no-warnings src/models/models.test.ts",
     "db:create": "psql -U blablabook -d blablabook -f ./src/migrations/create_tables.sql",
     "db:seed": "psql -U blablabook -d blablabook -f ./src/migrations/seeding_tables.sql"
@@ -22,14 +22,30 @@
   },
   "homepage": "https://github.com/O-clock-Samoussas/blabla-book-back#readme",
   "dependencies": {
+    "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
     "pg": "^8.14.1",
-    "sequelize": "^6.37.7"
+    "sanitize-html": "^2.16.0",
+    "sequelize": "^6.37.7",
+    "zod": "^3.24.3"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
+    "@types/bcrypt": "^5.0.2",
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
-    "ts-node-dev": "^2.0.0"
+    "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.9",
+    "@types/sanitize-html": "^2.15.0",
+    "@types/supertest": "^6.0.3",
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.10",
+    "supertest": "^7.1.0",
+    "ts-jest": "^29.3.2",
+    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.19.3"
   }
 }
