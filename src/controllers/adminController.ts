@@ -1,5 +1,9 @@
 import type { Response } from 'express';
-import { checkConfirmPassword, checkExistingBook, checkFoundBook } from '../errors/checkErros';
+import {
+  checkConfirmPassword,
+  checkExistingBook,
+  checkFoundBook,
+} from '../errors/checkErros';
 import { UnauthorizedError } from '../errors/customErrors';
 import { Book, Genre, LibraryBook, User } from '../models/association.model';
 import { createBookSchema, editBookSchema } from '../schemas/book.schema';
@@ -21,10 +25,7 @@ export const adminController = {
       throw new UnauthorizedError('Role admin manquant', 'admin');
     }
 
-    console.log(req.body);
-
     const parsedData = createBookSchema.parse(req.body);
-
 
     const existingBook = await Book.findOne({
       where: { isbn: parsedData.isbn },
@@ -73,8 +74,12 @@ export const adminController = {
     const parsedParams = paramsIdSchema.parse(req.params);
     const parsedData = editBookSchema.parse(req.body);
     const currentBook = await Book.findByPk(parsedParams.id);
-
     checkFoundBook(currentBook);
+
+    const existingBook = await Book.findOne({
+      where: { isbn: parsedData.isbn },
+    });
+    checkExistingBook(existingBook);
 
     let parsedGenres = {};
     if (req.body.genre1 !== '' && req.body.genre2 !== '') {
@@ -104,9 +109,7 @@ export const adminController = {
     res.status(200).json(currentBook);
   },
 
-  
   async deleteBook(req: IAuthenticatedRequest, res: Response) {
-    
     const parsedUser = userIdSchema.parse({ id: req.user.id });
 
     const user = await User.findByPk(parsedUser.id);
