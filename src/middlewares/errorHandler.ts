@@ -17,7 +17,7 @@ export const errorHandler = (
   }
 
   if (err instanceof AppError) {
-    const customErrors = [{ field: err.field, error: err.message }];
+    const customErrors = [{ field: err.field, message: err.message }];
     return res.status(err.statusCode).json({ errors: customErrors });
   }
 
