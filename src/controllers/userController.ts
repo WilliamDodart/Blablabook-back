@@ -1,5 +1,9 @@
 import type { Response } from 'express';
-import { checkConfirmPassword, checkFoundUser } from '../errors/checkErros';
+import {
+  checkConfirmPassword,
+  checkExistingUser,
+  checkFoundUser,
+} from '../errors/checkErros';
 import { Review, User } from '../models/association.model';
 import { Library } from '../models/association.model';
 import { Book } from '../models/association.model';
@@ -21,7 +25,7 @@ export const userController = {
         {
           model: Review,
           include: [Book],
-        }
+        },
       ],
     });
 
@@ -34,21 +38,25 @@ export const userController = {
     const parsedData = userIdSchema.parse({ id: req.user.id });
     const updatedData = req.body;
 
-    console.log(updatedData);
-
     const filteredData = Object.fromEntries(
-      Object.entries(updatedData).filter(([__, value]) => value != null)
+      Object.entries(updatedData).filter(([__, value]) => value != null),
     );
 
     if (filteredData.name != null) {
       await userDatasUpdate.parseAsync(filteredData);
     }
-    
+
     const user = await User.findByPk(parsedData.id);
     checkFoundUser(user);
 
-    await checkPassword(filteredData.currentPassword, user!.password);
+    if (filteredData.email) {
+      const existingEmail = await User.findOne({
+        where: { email: filteredData.email },
+      });
+      checkExistingUser(existingEmail);
+    }
 
+    await checkPassword(filteredData.currentPassword, user!.password);
 
     if (filteredData.newPassword) {
       checkConfirmPassword(
@@ -59,7 +67,6 @@ export const userController = {
       const hashedPassword = await hashPassword(filteredData.newPassword);
       filteredData.password = hashedPassword;
     }
-
 
     const currentUser = await user!.update(filteredData);
     const { password, ...safeUser } = currentUser.get({ plain: true });
@@ -87,8 +94,10 @@ export const userController = {
       deleteData.confirmPassword,
     );
 
-    for (const library of libraries) {   
-      await LibraryBook.destroy({ where: { library_id: library.dataValues.id } });
+    for (const library of libraries) {
+      await LibraryBook.destroy({
+        where: { library_id: library.dataValues.id },
+      });
       await library.destroy();
     }
 
