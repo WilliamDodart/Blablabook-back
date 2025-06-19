@@ -1,11 +1,15 @@
-import { Request, Response } from 'express';
-import { Review, Book, User } from '../models/association.model';
-import { checkFoundBook, checkFoundUser, checkExistingReview } from '../errors/checkErros';
-import { paramsReviewIdSchema } from '../schemas/review.schema';
+import type { Request, Response } from 'express';
+import {
+  checkExistingReview,
+  checkFoundBook,
+  checkFoundUser,
+} from '../errors/checkErros';
+import { Book, Review, User } from '../models/association.model';
 import { paramsIdSchema } from '../schemas/params.schema';
-import { userIdSchema } from '../schemas/user.schema';
+import { paramsReviewIdSchema } from '../schemas/review.schema';
 import { reviewSchema } from '../schemas/review.schema';
-import { IAuthenticatedRequest } from '../types/authenticatedRequest';
+import { userIdSchema } from '../schemas/user.schema';
+import type { IAuthenticatedRequest } from '../types/authenticatedRequest';
 
 export const reviewController = {
   async getReviewsForBook(req: Request, res: Response) {
@@ -43,8 +47,6 @@ export const reviewController = {
     res.status(200).json(reviews);
   },
 
-  
-
   async createReview(req: IAuthenticatedRequest, res: Response) {
     const parsedBook = paramsIdSchema.parse(req.params);
     const parsedUser = userIdSchema.parse({ id: req.user.id });
@@ -59,7 +61,7 @@ export const reviewController = {
         book_id: parsedBook.id,
       },
     });
-    console.log(review)
+
     checkExistingReview(review);
 
     const newReview = await Review.create({
@@ -78,9 +80,12 @@ export const reviewController = {
     const parsedData = reviewSchema.parse(req.body);
 
     const review = await Review.findByPk(parsedReview.id);
-    console.log(review)
+
     if (!review || review.user_id !== parsedUser.id) {
-      return res.status(403).json({ error: 'Cette review n\'existe pas ou alors vous n\'êtes pas autorisé à la modifier.' });
+      return res.status(403).json({
+        error:
+          "Cette review n'existe pas ou alors vous n'êtes pas autorisé à la modifier.",
+      });
     }
 
     review.content = parsedData.content ?? review.content;
@@ -94,14 +99,15 @@ export const reviewController = {
     const parsedReview = paramsReviewIdSchema.parse(req.params);
     const parsedUser = userIdSchema.parse({ id: req.user.id });
 
-    console.log(parsedReview, parsedUser);
-
     const review = await Review.findByPk(parsedReview.id);
     if (!review || review.user_id !== parsedUser.id) {
-      return res.status(403).json({ error: 'Cette review n\'existe pas ou alors vous n\'êtes pas autorisé à la modifier.' });
+      return res.status(403).json({
+        error:
+          "Cette review n'existe pas ou alors vous n'êtes pas autorisé à la modifier.",
+      });
     }
 
     await review.destroy();
-    res.status(200).json({ message: 'Review supprimée avec succès'});
+    res.status(200).json({ message: 'Review supprimée avec succès' });
   },
 };

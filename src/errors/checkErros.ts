@@ -76,7 +76,6 @@ export function checkRelationLibraryBook(data: LibraryBook | null) {
 }
 
 export function checkConfirmPassword(newPwd: string, confirmPwd: string) {
-  console.log(newPwd, confirmPwd);
   if (newPwd !== confirmPwd) {
     throw new BadRequestError(
       'Les mots de passe ne sont pas identiques',
