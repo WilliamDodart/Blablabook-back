@@ -1,8 +1,9 @@
 # 📚 Blabla Book - Ma bibliothèque personnelle
-[Vite](https://vitejs.dev/)
-[React](https://reactjs.org/)
-[TypeScript](https://www.typescriptlang.org/)
-[SCSS](https://sass-lang.com/)
+![Node.js](https://img.shields.io/badge/-Node.js-339933?style=flat&logo=node.js)
+![Express](https://img.shields.io/badge/-Express-000000?style=flat&logo=express)
+![Sequelize](https://img.shields.io/badge/-Sequelize-52B0E7?style=flat&logo=sequelize&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/-PostgreSQL-336791?style=flat&logo=postgresql)
+![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 
 Une application fullstack pour gérer sa collection de livres : ajouter, modifier, supprimer, classer et retrouver facilement ses lectures préférées.
 Retrouvez la partie front-end ici : https://github.com/WilliamDodart/Blablabook-front/tree/develop
@@ -29,100 +30,51 @@ Retrouvez la partie front-end ici : https://github.com/WilliamDodart/Blablabook-
 ![blablabook_3](https://github.com/user-attachments/assets/5e022843-0c27-4521-a40a-e4e244736e83)
 
 ---
+---
 
 # Blabla Book Back - Procédure d'initialisation
 
-## Création d'un repo local
-
-Copier la clé ssh du repo github
-
-Ouvrir un terminal dans le dossier dans lequel vous souhaitez positionner le projet puis clonez le repo :
+### 1. Cloner le dépôt
 
 ```bash
-git clone <cle_ssh_du_repo>
-```
-
-Se positionner dans le dossier de votre repo local et l'ouvrir
-
-```bash
+git clone <clé_ssh_du_repo>
 cd blabla-book-back
-code .
 ```
 
-
-## Installer les modules
-
-Dans un terminal positionné dans le projet blabla-book-back :
+### 2. Installer les dépendances
 
 ```bash
 npm install
 ```
 
-Installer l'extension Biome ou vérifier que votre extension Biome soit active.
-(l'extension peut avoir besoin d'être désactivée puis ré-activée pour fonctionner correctement)
-
-
-## Création de la base de données en local
-
-Se connecter à psql en super utilisateur via le terminal:
-
-```bash
+## 3. Créer l'utilisateur et la base de donnée
+```
 sudo -i -u postgres psql
+CREATE USER nom_user WITH PASSWORD 'mot_de_passe';
+CREATE DATABASE nom_base OWNER nom_user
+```
+Penser à se déconnecter (`CTRL + D`)
+
+
+## 4. Configurer les variables d'environnement
+Créer un fichier .env à parti du fichier .env.example et modifier `user`, `password`, `nom_base` et `port`par vos informations
+
+```
+PG_URL=postgres://user:password@localhost:5432/nom_base
+PORT=port
 ```
 
-Créer un utilisateur (nom d'utilisateur conseillé -> `blablabook`) :
-
-```sql
-CREATE USER nom_du_user WITH PASSWORD 'mot_de_passe';
+## 5. Synchroniser la base donnée
 ```
-
-Créer la base de données (nom de base de données conseillé -> `blablabook`) :
-
-```sql
-CREATE DATABASE nom_de_la_base OWNER nom_du_user;
-```
-
-Se déconnecter du rôle de super utilisateur :
-
-```sql
-Ctrl + D
-```
-
-## Création des variables d'environnement
-
-Créer un fichier `.env` à la racine du projet en vous basant sur le fichier `.env.example`
-
-Pensez à remplacer les informations par :
-
-- `votre port`
-- `nom d'utilisateur`
-- `mot de passe`
-- `nom de base de données`
-
-## Création des tables et seeding
-
-Créer les tables de la base de données via un terminal placé dans l'application blabla-book-back :
-
-```bash
-npm run db:create
-```
-
-Valider la commande en entrant votre mot de passe
-
-Remplir la base de données via un terminal placé dans l'application blabla-book-back :
-
-```bash
+npm run db:sync
 npm run db:seed
 ```
 
-Valider la commande en entrant votre mot de passe
+## 6. Démarrer le serveur
+```
+npm run dev
+```
 
-(Si le nom d'utilisateur ou celui de la base de données n'est pas `blablabook`, il faudra alors le modifier dans le fichier package.json pour que les deux commandes précédentes fonctionnent)
 
 ## Fin de l'initialisation
 
-## Démarrage de l'API
-
-```bash
-npm run dev
-```
