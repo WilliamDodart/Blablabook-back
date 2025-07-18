@@ -128,9 +128,11 @@ export const libraryController = {
   },
 
   async addBookToLibrary(req: Request, res: Response) {
+    //Récupération et validation des données entrantes
     const parsedId = bookAndLibrarySchema.parse(req.params);
     const parsedData = addBookToLibrarySchema.parse(req.body);
 
+    //Récupération de la bibliothèque
     const currentLibrary = await Library.findOne({
       where: {
         id: parsedId.libraryId,
@@ -140,20 +142,23 @@ export const libraryController = {
       },
     });
 
+    //Vérification de l'existence de la bibliothèque
     checkFoundLibrary(currentLibrary);
 
+    //Vérification de la présence du livre dans la bibliothèque
     const existingBook = currentLibrary?.Books.find(
       (book) => book.id === parsedId.bookId,
     );
-
     checkExistingBookinLibrary(existingBook);
 
+    //Ajout du livre à la bibliothèque
     await LibraryBook.create({
       library_id: parsedId.libraryId,
       book_id: parsedId.bookId,
       read: parsedData.read,
     });
 
+    //Réponse pour le front-end
     const newLibrary = await Library.findOne({
       where: {
         id: parsedId.libraryId,
@@ -162,7 +167,6 @@ export const libraryController = {
         model: Book,
       },
     });
-
     res.status(200).json(newLibrary);
   },
 
