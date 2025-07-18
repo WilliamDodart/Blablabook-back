@@ -10,6 +10,15 @@ describe('libraryUpdateSchema -> Schema de validation', () => {
         expect(result.data.name).toBe('Test de nom');
       }
     });
+
+    it('doit sanitizer les datas', () => {
+      const scriptInput = '<script>alert</script>Ma biblio';
+      const result = libraryUpdateSchema.safeParse({ name: scriptInput });
+      expect(result.success).toBe(true);
+      if (result.success) {
+        expect(result.data.name).toBe('Ma biblio');
+      }
+    });
   });
 
   describe('Cas d’échec', () => {
@@ -35,15 +44,6 @@ describe('libraryUpdateSchema -> Schema de validation', () => {
       expect(result.success).toBe(false);
       if (!result.success) {
         expect(result.error.issues[0].message).toMatch(/Expected string/);
-      }
-    });
-
-    it('doit sanitizer les datas', () => {
-      const scriptInput = '<script>alert</script>Ma biblio';
-      const result = libraryUpdateSchema.safeParse({ name: scriptInput });
-      expect(result.success).toBe(true);
-      if (result.success) {
-        expect(result.data.name).toBe('Ma biblio');
       }
     });
   });
