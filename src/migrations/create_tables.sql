@@ -1,6 +1,7 @@
 BEGIN;
 
-DROP TABLE IF EXISTS "user",
+DROP TABLE IF EXISTS 
+"user",
 "book",
 "library",
 "library_book",

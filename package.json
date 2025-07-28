@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --verbose",
+    "test:library": "jest tests/library --verbose",
     "dev": "nodemon",
     "prod": "ts-node src/server.ts",
     "model:test": "node --loader ts-node/esm --no-warnings src/models/models.test.ts",
